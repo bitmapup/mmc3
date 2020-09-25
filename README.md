@@ -4,7 +4,7 @@
 
 ## Installation
 
-First, Use the git command [clone](https://git-scm.com/docs/git-clone) to create a new directory.
+First, use the git command [clone](https://git-scm.com/docs/git-clone) to create a new directory.
 
 ```
 git clone https://github.com/bitmapup/mmc3
@@ -17,8 +17,6 @@ pip install -r requirements.txt
 ```
 
 ## Test the installation
-
->Optional
 
 Once you have successfully cloned the repository. You will have to change directories were you had installed the library. Then run the following command:
 
