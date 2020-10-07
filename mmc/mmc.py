@@ -165,7 +165,7 @@ class Mmc(object):
             if (self._daysArrayBoolean[j]):
                 i = 0
                 while (i < self._timeSlices):
-                    t_begin = time(i * windowsSize)
+                    t_begin = time(int(i) * int(windowsSize))
                     t_end = 0
                     if (i + 1) * windowsSize == 24:
                         t_end = time.max

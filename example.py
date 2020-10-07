@@ -3,11 +3,13 @@ from os.path import isfile, join, exists, dirname, realpath
 import sys
 import datetime
 import pandas as pd
-import psycopg2
+#import psycopg2
 import logging
 import configparser
 import csv
 from mmc.mobilitytrace import MobilityTrace
+from mmc.mmc import Mmc
+from cluster.djcluster import Djcluster
 global OUTPUTPATH
 global INPUTPATH
 global INPUT
@@ -44,24 +46,25 @@ def buildSubscribersMmc (inputFilePath,outputFolder):
                     trailmt[idUser] = [aux_mt]
                     if (not idUser in processedUsers):
                         processedUsers.append(idUser)
-                else:
-                    minpts = 2
-                    eps = 10
-                    key = processedUsers[-1]
-                    oDjCluster = Djcluster(minpts,eps,trailmt[key])
-                    #clustering
-                    oDjCluster.doCluster()
-                    oDjCluster.post_proccessing()
+        logging.info("Executing model")
+        minpts = 10
+        eps = 10
+        key = processedUsers[-1]
+        oDjCluster = Djcluster(minpts,eps,trailmt[key])
+        #clustering
+        oDjCluster.doCluster()
+        oDjCluster.post_proccessing()
 
-                    #building mobility models
-                    oMmc = Mmc(oDjCluster,
-                           trailmt[key],key,
-                           daysArray=pDaysArray,
-                           timeSlices=pTimeslices,
-                           radius=eps
-                           )
-                    oMmc.buildModel()
-                    oMmc.export(outputFolder)
+        #building mobility models
+        oMmc = Mmc(oDjCluster,
+               trailmt[key],key,
+               daysArray=pDaysArray,
+               timeSlices=pTimeslices,
+               radius=eps
+               )
+        oMmc.buildModel()
+        print (oMmc)
+        oMmc.export(outputFolder)
 
 #end buildSubscribersMmc
 
@@ -101,4 +104,3 @@ if __name__ == "__main__":
         t_end =  datetime.datetime.now()
         buildSubscribersMmc(INPUTPATH, OUTPUTPATH)
         logging.info("The work end successfully in {} time".format(str(t_end-t_begin)))
-
